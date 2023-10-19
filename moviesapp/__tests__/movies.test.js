@@ -4,6 +4,8 @@ let driver;
 
 beforeEach(async () => {
     driver = await new Builder().forBrowser(Browser.CHROME).build();
+    await driver.get("http://localhost:3000/")
+    
 });
 
 afterEach(async () => {
@@ -13,10 +15,7 @@ afterEach(async () => {
 
 describe("Test the movies app", () => {
     test("can add a movie", async () => {
-        
         const movie = 'Spiderman 2';
-
-        await driver.get("http://localhost:3000/")
 
         await driver.findElement(By.css('input[name="movieTitle"]')).sendKeys('Spiderman 2')
 
@@ -35,10 +34,8 @@ describe("Test the movies app", () => {
 
 
     test("can remove a movie", async () => {
-
-        await driver.get("http://localhost:3000/")
-
         const movie = 'Spiderman 2';
+
 
         await driver.findElement(By.css('input[name="movieTitle"]')).sendKeys('Spiderman 2')
 
@@ -51,6 +48,12 @@ describe("Test the movies app", () => {
 
         await driver.findElement(By.xpath('//button[@class="delete-btn"]')).click()
 
+
+
+        const checkMessage = await driver.wait(until.elementLocated(By.id('message')))
+        expect(await checkMessage.getText()).toContain(movie)
+
+
         // const ulList = await driver.wait(until.elementLocated(By.css('label[for="movie-0"]')), 1000)
         
         // expect(await ulList.get().toBe())
@@ -60,10 +63,8 @@ describe("Test the movies app", () => {
 
 
     test("can check watched movie", async () => {
-
-        await driver.get("http://localhost:3000/")
-
         const movie = 'Spiderman 2';
+
 
         await driver.findElement(By.css('input[name="movieTitle"]')).sendKeys('Spiderman 2')
 
@@ -73,14 +74,17 @@ describe("Test the movies app", () => {
         await driver.sleep(500);
         
         await driver.findElement(By.xpath('//input[@type="checkbox"]')).click()
+
+
+        const checkMessage = await driver.wait(until.elementLocated(By.id('message')))
+        expect(await checkMessage.getText()).toContain(movie)
+
+
         
         await driver.sleep(2000);
     });
 
     test("can uncheck movie", async () => {
-
-        await driver.get("http://localhost:3000/")
-
         const movie = 'Spiderman 2';
 
         await driver.findElement(By.css('input[name="movieTitle"]')).sendKeys('Spiderman 2')
@@ -95,6 +99,11 @@ describe("Test the movies app", () => {
         await driver.sleep(2000);
 
         await driver.findElement(By.xpath('//input[@type="checkbox"]')).click()
+
+
+        const checkMessage = await driver.wait(until.elementLocated(By.id('message')))
+        expect(await checkMessage.getText()).toContain(movie)
+
         
         await driver.sleep(2000);
     });
