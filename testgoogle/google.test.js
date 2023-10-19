@@ -53,6 +53,7 @@ test("can search Google twice", async () => {
 
   expect(await currentPage.getText()).toBe("Spider-Man 2")
 
+  
 
   // await driver.sleep(3000);
 
